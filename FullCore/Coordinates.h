@@ -2,10 +2,9 @@
 #include <direct.h>
 
 TCHAR current_library_path[80] = "/lib/";
-// const double tvs_size = 234.6; //tutnov
-const double tvs_size = 236; // Nominal
+//const double tvs_size = 236; // Nominal
 
-double ReturnCoordinatesTvs(short tvs, bool x)
+std::vector<std::pair<double, double>> ReturnCoordinatesTvs(short quantity, int mode)
 {
 	//static HINSTANCE hLibrary_163;
 	HMODULE hLibrary_163;
@@ -16,7 +15,8 @@ double ReturnCoordinatesTvs(short tvs, bool x)
 	_chdir(current_library_path);
 
 	hLibrary_163 = LoadLibrary(_T("Coordinates_Definition"));
-	double(*pFunction) (double, int, bool);
+	std::pair<double, double>(*pFunction) (double, int, int, bool);
+	//step,quantity,mode, debug_mode
 
 	if (hLibrary_163)
 	{
@@ -25,17 +25,21 @@ double ReturnCoordinatesTvs(short tvs, bool x)
 			cout << "NOT FIND cdefine at Coordinates_definition at ''ReturnCoordinates function\n";
 		else
 		{
-			if (x)
-				return pFunction(tvs_size, tvs, x);
-			else
-				return pFunction(tvs_size, tvs, false);
+			std::vector<std::pair<double, double>> value;
+			for (int i = 0; i < quantity; i++)
+			{
+				std::pair<double, double> v = pFunction(tvs_size, i, mode, true);
+				value.push_back(v);
+			}
+				
+			return value;
 		}
 	}
 	else
 	{
 		cout << "ERROR OPENING LIBRARY => COORDINATES_DEFINITION.dll\n";
 	}
-	return 0;
+	return { {0,0} };
 }
 
 double ReturnCoordinatesTvel(short tvel, bool x)

@@ -191,9 +191,20 @@ void SCore::SetColorVar(bool _b)
 
 void SCore::SetFuelAssemblyQuantity(int _v)
 {
-	if (_v < 0)
+	if (_v < 0 && _v != 163 && _v != 360
+		&& _v != 28 && _v != 60
+		&& _v != 55 && _v != 120) {
 		log.Error("fuel assembly quantity", __FUNCTION__);
-	_v > 0 ? fa_count = _v : fa_count = 163;
+		printf("Wrong value. Allowed:\n163 or 360 for 360 deg\n28 or 60 for 60 deg\n55 or 120 for 120deg\nCancel\n");
+		return;
+	}
+	if (_v == 60)
+		_v = 28;
+	else if (_v == 120)
+		_v = 55;
+	else if (_v == 360)
+		_v = 163;
+	fa_count = _v;
 	parameters["FA_QUANTITY"] = to_string(fa_count);
 }
 
@@ -511,8 +522,6 @@ void SCore::CurrentValues(int param)
 		break;
 	case 3:
 		cerr << GetFuelAssemblyQuantity();
-		cerr << "Disabled\n";
-		return;
 		break;
 	case 4:
 		cerr << GetImageSizeX();
@@ -589,7 +598,6 @@ void SCore::EditValues(int param)
 					SetCellSize(val);
 					break;
 				case 3:
-					return;
 					SetFuelAssemblyQuantity(val);
 					break;
 				case 4:

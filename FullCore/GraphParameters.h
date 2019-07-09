@@ -278,3 +278,32 @@ void SCore::GetPointData()
 		log.Error(gkq.what(), __FUNCTION__);
 	}
 }
+
+void SCore::DefineMode()
+{
+	if (fa_count == 163)
+		mode = 0;
+	if (fa_count == 28)
+		mode = 1;
+	if (fa_count == 55)
+		mode = 2;
+}
+
+void SCore::SetCoordinates(int fa_quantity)
+{
+	coordinates.clear();
+	coordinates = ReturnCoordinatesTvs(fa_quantity, mode);
+}
+
+
+double SCore::GetCoordinates(int fa, bool isX)
+{
+	double _c = 0;
+	if (isX)
+		_c = coordinates[fa].first;
+	else
+		_c = coordinates[fa].second;
+
+	return _c * grid_pitch * scale;
+
+}

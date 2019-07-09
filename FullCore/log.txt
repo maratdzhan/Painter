@@ -1849,3 +1849,192 @@ no selected data types in files. break.
 ### Session start
 Thu Jun 27 15:15:35 2019
 
+### Session start
+Tue Jul  9 13:46:22 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:49:37 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:50:06 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:51:17 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:53:27 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:53:56 2019
+
+SCore::SetFuelAssemblyQuantity
+fuel assembly quantity *error*
+### Session start
+Tue Jul  9 13:54:54 2019
+
+### Session start
+Tue Jul  9 13:55:23 2019
+
+### Session start
+Tue Jul  9 13:55:27 2019
+
+### Session start
+Tue Jul  9 13:56:50 2019
+
+### Session start
+Tue Jul  9 14:03:15 2019
+
+### Session start
+Tue Jul  9 14:13:46 2019
+
+### Session start
+Tue Jul  9 14:14:28 2019
+
+### Session start
+Tue Jul  9 14:15:03 2019
+
+### Session start
+Tue Jul  9 14:16:49 2019
+
+### Session start
+Tue Jul  9 16:15:27 2019
+
+### Session start
+Tue Jul  9 16:16:38 2019
+
+### Session start
+Tue Jul  9 16:17:50 2019
+
+### Session start
+Tue Jul  9 16:18:12 2019
+
+### Session start
+Tue Jul  9 16:19:42 2019
+
+### Session start
+Tue Jul  9 16:20:40 2019
+
+### Session start
+Tue Jul  9 16:38:29 2019
+
+### Session start
+Tue Jul  9 16:40:15 2019
+
+### Session start
+Tue Jul  9 16:41:14 2019
+
+### Session start
+Tue Jul  9 16:42:27 2019
+
+### Session start
+Tue Jul  9 16:44:59 2019
+
+### Session start
+Tue Jul  9 16:47:04 2019
+
+### Session start
+Tue Jul  9 16:48:12 2019
+
+### Session start
+Tue Jul  9 16:49:27 2019
+
+### Session start
+Tue Jul  9 16:50:52 2019
+
+### Session start
+Tue Jul  9 16:58:58 2019
+
+### Session start
+Tue Jul  9 16:59:59 2019
+
+### Session start
+Tue Jul  9 17:01:21 2019
+
+### Session start
+Tue Jul  9 17:02:17 2019
+
+Core could not be builded -> input data has not been loaded
+### Session start
+Tue Jul  9 17:02:58 2019
+
+### Session start
+Tue Jul  9 17:04:37 2019
+
+### Session start
+Tue Jul  9 17:05:38 2019
+
+### Session start
+Tue Jul  9 17:06:32 2019
+
+### Session start
+Tue Jul  9 17:10:32 2019
+
+### Session start
+Tue Jul  9 17:12:54 2019
+
+### Session start
+Tue Jul  9 17:14:10 2019
+
+### Session start
+Tue Jul  9 17:15:06 2019
+
+### Session start
+Tue Jul  9 17:15:36 2019
+
+### Session start
+Tue Jul  9 17:17:58 2019
+
+### Session start
+Tue Jul  9 17:18:06 2019
+
+### Session start
+Tue Jul  9 17:18:42 2019
+
+### Session start
+Tue Jul  9 17:19:16 2019
+
+### Session start
+Tue Jul  9 17:20:17 2019
+
+### Session start
+Tue Jul  9 17:25:58 2019
+
+### Session start
+Tue Jul  9 17:33:32 2019
+
+### Session start
+Tue Jul  9 17:34:48 2019
+
+### Session start
+Tue Jul  9 17:35:28 2019
+
+### Session start
+Tue Jul  9 17:37:17 2019
+
+### Session start
+Tue Jul  9 17:41:38 2019
+
+Core could not be builded -> input data has not been loaded
+### Session start
+Tue Jul  9 17:46:02 2019
+
+### Session start
+Tue Jul  9 17:46:56 2019
+
+### Session start
+Tue Jul  9 17:49:49 2019
+

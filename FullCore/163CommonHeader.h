@@ -1,8 +1,6 @@
 #pragma once
 
-
 #include <algorithm>
-#include <xstring>
 #include <map>
 #include <vector>
 #include <string>
@@ -10,9 +8,13 @@
 #include <iostream>
 #include <thread>
 
+#define tvs_size 236
+
 
 
 using namespace std;
+
+#include "Coordinates.h"
 #include "GetParam.h"
 #include "Logging.h"
 #include "Store.h"
@@ -96,6 +98,5 @@ public:
 #include "Handler.h"
 #include "Initialize.h"
 #include "GraphParameters.h"
-#include "Coordinates.h"
 
 

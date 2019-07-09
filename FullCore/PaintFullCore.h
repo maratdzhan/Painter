@@ -19,9 +19,9 @@ unsigned __stdcall MyThread(void * param)
 
 LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 	WPARAM wParam, LPARAM lParam)
-{ 
+{
 	////////////// LOCAL VARIABLES
-	
+
 	int sx = sys.GetImageSizeX();
 	int sy = sys.GetImageSizeY();
 	double cell_size_local = sys.GetCellSize();
@@ -52,10 +52,8 @@ LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 
 		break;
 	case WM_SIZE:
-		sx = LOWORD(lParam);
-		sy = HIWORD(lParam);
-		sys.SetImageSizeX(sx);
-		sys.SetImageSizeY(sy);
+		sys.SetImageSizeX(sx = LOWORD(lParam));
+		sys.SetImageSizeY(sy = HIWORD(lParam));
 		break;
 	case WM_PAINT:
 	{
@@ -63,15 +61,18 @@ LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 		sys.hdc = hdc;
 		sys.paintstruct = ps;
 		sys.hwnd = hWnd;
-		SetMapMode(hdc, MM_ANISOTROPIC);				
-		SetViewportOrgEx(hdc, sx / 2, sy / 2, NULL);	
-		SetWindowExtEx(hdc, sx, sy, NULL);				
-		SetViewportExtEx(hdc, sx, sy, NULL);		
+		SetMapMode(hdc, MM_ANISOTROPIC);
+
+		SetViewportOrgEx(hdc, sx / 2, sy / 2, NULL);
+		
+		SetWindowExtEx(hdc, sx, sy, NULL);
+		SetViewportExtEx(hdc, sx, sy, NULL);
 
 		for (short i = 0; i < NUMBER_OF_FA; i++)
 		{
-			x = (ReturnCoordinatesTvs(i + 1, true)) *grid_pitch* scale;
-			y = (ReturnCoordinatesTvs(i + 1, false)) *grid_pitch* scale;
+
+			x = sys.GetCoordinates(i, true);
+			y = sys.GetCoordinates(i, false);
 			SetViewportOrgEx(hdc, int(sx / 2 + x), (int)(sy / 2 - y), NULL);
 
 
@@ -105,13 +106,13 @@ LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 			FillPath(hdc);
 			DeleteObject(hBrush);
 
-
-
 			if (numberOfStrings > 0)
 			{
 				sys.PrintText(i);
 			}
+
 		}
+	
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_QUIT:
@@ -124,8 +125,9 @@ LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	}
-	
 }
+	
+
 
 void SCore::Paint()
 {
@@ -133,8 +135,17 @@ void SCore::Paint()
 	hwnd = NULL;
 	if (IsLoaded() && !IsCoreActive())
 	{
-		GraphThread= (HANDLE)_beginthreadex(NULL, 0, MyThread, NULL, 0, NULL);
-		SetCoreActive(true);
+		if (TVS.main.size() >= fa_count && TVS.secondary.size() >= fa_count) {
+			DefineMode();
+			SetCoordinates(fa_count);
+			GraphThread = (HANDLE)_beginthreadex(NULL, 0, MyThread, NULL, 0, NULL);
+			SetCoreActive(true);
+		}
+		else
+		{
+			printf(">>>wrong geometry. Check fa quantity\n>>>current: %i && %i, but needs %i\n\n",
+				TVS.main.size(), TVS.secondary.size(), fa_count);
+		}
 	}
 	else
 	{
@@ -162,7 +173,7 @@ void SCore::PrintText(int number)
 {
 	SetTextColor(hdc, 0);
 	SetBkMode(hdc, TRANSPARENT);
-	HFONT nf = CreateFont(text_size, 0, 0, 0, text_thikness, 0, text_underline, text_strikeout,
+	HFONT nf = CreateFont(GetTextSize(), 0, 0, 0, GetTextThikness(), 0, GetTextUnderline(), GetTextStrikeout(),
 		DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS,
 		PROOF_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("Arial"));
 	SelectObject(hdc, nf);
@@ -195,4 +206,5 @@ void SCore::PrintText(int number)
 	}
 
 	stringsPosition.clear();
+	DeleteObject((HFONT)nf);
 }

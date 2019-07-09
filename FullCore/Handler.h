@@ -70,6 +70,8 @@ public:
 	bool GetTextStrikeout()const;
 	int GetTextInitX()const;
 	int GetTextInitY()const;
+	void SetCoordinates(int fa_quantity);
+	double GetCoordinates(int fa_quantity, bool isX);
 
 	// Text
 	void EditCommonInfo();
@@ -144,6 +146,7 @@ public:
 
 private:
 	void EditValues(int param);
+	void DefineMode();
 
 public:
 	HDC hdc;
@@ -175,6 +178,8 @@ private:
 	Logging log;
 	KK_values TVS;
 	string parameters_file;
-	std::map<std::string, std::string> parameters;
+	map<string, string> parameters;
 	bool isCoreActive;
+	int mode;
+	vector<pair<double, double>> coordinates;
 };
