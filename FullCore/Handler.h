@@ -1,5 +1,9 @@
 #pragma once
 
+string VARIBLE_NAME = "NULL";
+
+#define SAVE_VARIBLE_NAME(varible) VARIBLE_NAME = string(#varible);
+
 
 
 
@@ -49,6 +53,7 @@ public:
 	void SetTextStrikeout(int _b);
 	void SetTextInitX(int _i);
 	void SetTextInitY(int _i);
+	void SetDebug(int _i);
 
 	// GetCoreParameters
 	int GetCellSize()const;
@@ -72,77 +77,30 @@ public:
 	int GetTextInitY()const;
 	void SetCoordinates(int fa_quantity);
 	double GetCoordinates(int fa_quantity, bool isX);
-
+	int GetDebug()const;
 	// Text
 	void EditCommonInfo();
 	void CommandsList();
+	void DebugInfo();
 
 
-	//Save
+	//Interface
 	void Save(const std::string& s);
 	void PrintText(int number);
-
-	int GetMainCommand(const string & input)
-	{
-		
-		if (input == "PRINT") return 1;
-		if (input == "EDIT") return 2;
-		if (input == "GET") return 3;
-		if (input == "END") return 10;
-		if (input == "SAVE") return 9;
-		if (input == "GRAB") return 8;
-		if (input == "STORE") return 7;
-		if (input == "CLOSE") return 6;
-		if (input == "UPDATE") return 5;
-		return 0;
-	}
-
-	int GetCommand();
-
-
-	void Update()
-	{
-		InvalidateRect(HGraph, NULL, TRUE);
-		UpdateWindow(HGraph);
-		
-	}
-
-	~SCore()
-	{
-		DestroyWindow(HGraph);
-
-	}
-
-	void Store()
-	{
-		if (IsCoreActive()) {
-			string _name = GetSimpleDate();
-			_name += ".bmp";
-			StoreClientWindowBitmap(HGraph, _name.data());
-		}
-	}
-
-	bool IsLoaded()const {
-		return TVS.isLoaded;
-	}
-
-	bool IsCoreActive() const
-	{
-		return isCoreActive;
-	}
-
-	void SetCoreActive(bool _b) 
-	{
-		isCoreActive = _b;
-	}
-
-	
-
-
-
-
 	void Paint();
 	void Close();
+
+	// Handle
+	int GetCommand();
+	~SCore() { DestroyWindow(HGraph); }
+	int GetMainCommand(const string& input);
+	bool IsLoaded()const;
+	bool IsCoreActive() const;
+	void SetCoreActive(bool _b);
+	void Update();
+	void Store();
+	void SelectAssemblies();
+	void Cut(std::vector<double>& input);
 
 private:
 	void EditValues(int param);
@@ -169,6 +127,7 @@ private:
 	int i_pos_x;
 	int i_pos_y;
 	int text_thikness;
+	int m_debug;
 	bool text_underline;
 	bool text_strikeout;
 	int text_init_x;
@@ -183,3 +142,134 @@ private:
 	int mode;
 	vector<pair<double, double>> coordinates;
 };
+
+
+int SCore::GetMainCommand(const string& input)
+{
+
+	if (input == "PRINT") return 1;
+	if (input == "EDIT") return 2;
+	if (input == "GET") return 3;
+	if (input == "DEBUG_INFO") return 11;
+	if (input == "END") return 10;
+	if (input == "SAVE") return 9;
+	if (input == "GRAB") return 8;
+	if (input == "STORE") return 7;
+	if (input == "CLOSE") return 6;
+	if (input == "UPDATE") return 5;
+	return 0;
+}
+
+void SCore::Update()
+{
+	InvalidateRect(HGraph, NULL, TRUE);
+	UpdateWindow(HGraph);
+
+}
+
+void SCore::Store()
+{
+	if (IsCoreActive()) {
+		string _name = GetSimpleDate();
+		_name += ".bmp";
+		StoreClientWindowBitmap(HGraph, _name.data());
+	}
+}
+
+bool SCore::IsLoaded()const {
+	return TVS.isLoaded;
+}
+
+bool SCore::IsCoreActive() const
+{
+	return isCoreActive;
+}
+
+void SCore::SetCoreActive(bool _b)
+{
+	isCoreActive = _b;
+}
+
+void SCore::SelectAssemblies()
+{
+	if ((int)TVS.main.size() > GetFuelAssemblyQuantity()) {
+		SAVE_VARIBLE_NAME(TVS.main);
+		Cut(TVS.main);
+	}
+
+	if ((int)TVS.secondary.size() > GetFuelAssemblyQuantity()) {
+		SAVE_VARIBLE_NAME(TVS.secondary);
+		Cut(TVS.secondary);
+	}
+}
+
+void SCore::Cut(std::vector<double> & input)
+{
+	std::cerr << " :: more than " << GetFuelAssemblyQuantity() << " points\n";
+	std::cerr << "defined as <FuelAssemblyQuantity()>\n";
+	std::cerr << "Would you like select cut the assemblies array? (1 - Y, 0 - N)\n";
+
+	std::string ch;
+	
+	while (1) {
+		std::cerr << ">> ";
+		std::cin >> ch;
+		if (ch == "1")
+			break;
+		if (ch == "0")
+			//return;
+			std::cerr << "command disabled. Cut an array\n";
+		std::cerr << "unknown. repeat\n";
+	}
+
+	int _sample = input.size() / GetFuelAssemblyQuantity();
+	std::cerr << "samples quantity: " << _sample 
+		<< std::endl<< "\nwich sample you want to observe? (-1 - quit)\n";
+	int sq = _sample;
+	while (1) {
+		std::cerr << ">>";
+		std::cin >> _sample;
+		if (_sample == -1)
+			//return;
+			std::cerr << "command disabled. Cut an array\n";
+		if (_sample <= 0 || _sample > sq)
+			std::cerr << "wrong\n";
+		else
+			break;
+	}
+
+	if (_sample > 1)
+		for (int i = 0; i < GetFuelAssemblyQuantity(); i++)
+			input[i] = input[(i)+(_sample - 1) * GetFuelAssemblyQuantity()];
+
+
+	input.resize(GetFuelAssemblyQuantity());
+	
+}
+
+
+void SCore::DebugInfo() {
+	system("cls");
+	cerr << "Debug info:\n";
+	cerr << "KQ MAX: " << TVS.tvs_max << endl;
+	cerr << "KQ_MIN: "<<TVS.tvs_min << endl;
+	cerr << "Colors quantity: " << colors_quantity << endl;
+	cerr << "Zero group in: " << TVS.zero_group << endl;
+	cerr << "Group step is: " << TVS.step_size << endl;
+	cerr << "=========\nGraph parameters:\n";
+	cerr << "Cell size: " << cell_size << endl;
+	cerr << "Grid pitch: " << grid_pitch << endl;
+	cerr << "Text Y interval: " << text_y_interval << endl;
+	cerr << "Scale: " << scale << endl;
+	cerr << "Text symbol count: " << text_lenght << endl;
+	cerr << "Strings quantity: " << strings_quantity << endl;
+	cerr << "Font size: " << text_size << endl;
+	cerr << "Use color? " << colored << endl;
+	cerr << "Color group quantity:" << colors_quantity << endl;
+	cerr << "Geometry: " << fa_count << endl;
+	cerr << "Size X/Y: " << sx << " / " << sy << endl;
+	cerr << "Initial position (X/Y): " << i_pos_x << " / " << i_pos_y << endl;
+	cerr << "Text thickness: " << text_thikness << endl;
+	cerr << "Text underline/strikeout: " << text_underline << " / " << text_strikeout << endl;
+	cerr << "Text initial position (X/Y): " << text_init_x << " / " << text_init_y << endl;
+}

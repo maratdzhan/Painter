@@ -23,6 +23,7 @@
     <ProjectGuid>{AE0D27F3-1CF6-4E29-B6E7-6BF481383E00}</ProjectGuid>
     <RootNamespace>FullCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Painter</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -27,8 +27,6 @@ void SCore::TextOutCoord()
 	}
 }
 
-
-
 void SCore::Load()
 {
 	std::ifstream inputFile(parameters_file);
@@ -53,7 +51,6 @@ void SCore::Load()
 	inputFile.close();
 }
 
-
 COLORREF SCore::ColorReference(short number)
 {
 	COLORREF cellColor;
@@ -66,75 +63,64 @@ COLORREF SCore::ColorReference(short number)
 	double current_value = (TVS.isDifference ? TVS.dev[number] : TVS.main[number]);
 
 	double range = max_value - min_value;
-	double step_size = range / (colors_quantity - 1);
+//	double step_size = range / (colors_quantity - 1);
 
 	short group_number = -1;
 
 	unsigned short stColorVal = 120;
 	unsigned short endColorVal = 255;
 
-	short zero_group = 0;
+//	short zero_group = 0;
 
 	// Вычисление группы, к которой принадлежит текущий элемент
-	for (short i = 2; i < colors_quantity + 1; i++)
-	{
-		double kkz = min_value + i * step_size;
-		if (current_value <= (min_value + i * step_size))
-		{
-			group_number = i - 1;
-			break;
-		}
-	}
 
-	// Вычисление нулевой группы
-	if ((min_value * max_value < 0))
-	{
-		// Нулевой становится та группа, котороя предшествует группе, значение поля которой превышает 0 в первый раз
-		for (short i = 1; i < colors_quantity + 1; i++)
-		{
-			if (0 < (min_value + (i * step_size)))
-			{
-				zero_group = i - 1;
-				break;
-			}
-		}
-	}
-	else
-	{
-		// Старый алгоритм нормировал на единицу. Он под //
-		// Новый алгоритм выбирает середину, если нулевая группа имеет сильное смещение к единице.
-		for (short i = 1; i < colors_quantity + 1; i++)
-		{
-			if (1 < (min_value + (i * step_size)))
-			{
-				if (i > 1) {
-					zero_group = i - 1;
-					break;
-				}
-				else
-				{
-					zero_group = colors_quantity / 2;
-				}
-			}
-		}
-	}
+	group_number = (int)((current_value - TVS.tvs_min) * colors_quantity / (TVS.tvs_max - TVS.tvs_min));
+
+	// Старый алгоритм вычисления. Сейчас он используется в KK_value::SetZeroGroup()
+	//// Вычисление нулевой группы
+	//if ((min_value * max_value < 0))
+	//{
+	//	for (short i = 1; i < colors_quantity + 1; i++)
+	//	{
+	//		if (0 < (min_value + (i * step_size)))
+	//		{
+	//			zero_group = i - 1;
+	//			break;
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	for (short i = 1; i < colors_quantity + 1; i++)
+	//	{
+	//		if (1 < (min_value + (i * step_size)))
+	//		{
+	//			if (i > 1) {
+	//				zero_group = i - 1;
+	//				break;
+	//			}
+	//			else
+	//			{
+	//				zero_group = colors_quantity / 2;
+	//			}
+	//		}
+	//	}
+	//}
 
 	unsigned short gr = 0;
 	unsigned short bl = 0;
 	unsigned short rd = 0;
 
-//	if (zero_group < 2) printf("\n\nError in zero group!!!!!!!\nThat may be caused in case of difference in tvels position\n");
-
 	int inner_pt = 0;
 	short rd_step_1 = 0, gr_step_1 = 0, bl_step_1 = 0, gr_step_2 = 0;
 
-	if (group_number < zero_group)
+	if (group_number < TVS.zero_group)
 	{
 		rd = 0;
 		gr = 135;
 		bl = 255;
-		rd_step_1 = (250 / (zero_group - 1));
-		gr_step_1 = (120 / (zero_group - 1));
+		rd_step_1 = (250 / (TVS.zero_group - 1));
+		gr_step_1 = (120 / (TVS.zero_group - 1));
 		inner_pt = 1;
 		rd += (rd_step_1 * group_number);
 		gr += (gr_step_1 * group_number);
@@ -144,22 +130,29 @@ COLORREF SCore::ColorReference(short number)
 		rd = 255;
 		gr = 255;
 		bl = 255;
-		if (group_number < (colors_quantity+ zero_group) / 2)
+		if (group_number < (colors_quantity+ TVS.zero_group) / 2)
 		{
-			bl -= (255 / (colors_quantity - zero_group)) * (group_number - zero_group);
-			//gr = 255-180 / ((colorCount + zero_group)/2.)*(group_number - zero_group);
+			bl -= (255 / (colors_quantity - TVS.zero_group)) * (group_number - TVS.zero_group);
 		}
 		else
 		{
-			bl = 130 - (130 / (colors_quantity - zero_group - 1)) * (group_number - zero_group + 1);
-			gr = 255 - (255 / (colors_quantity - zero_group - 1)) * (group_number - zero_group + 1);
+			bl = 130 - (130 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group + 1);
+			gr = 255 - (255 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group + 1);
 		}
 	}
+
+	//// BLUE - VALID
+	//bl = (group_number <= TVS.zero_group ? 255 : 255 * (1 - ((double)group_number / colors_quantity)));
+
+	//// GREEN - VALID
+	//gr = (group_number <= TVS.zero_group ? (120 + (135. * ((double)group_number / TVS.zero_group))) : (255 - 205. * ((double)group_number - TVS.zero_group) / (colors_quantity - TVS.zero_group)));
+	//
+	//// RED - VALID
+	//rd = (group_number > TVS.zero_group ? 255 : 255 * ((double)group_number / TVS.zero_group));
 
 	cellColor = RGB(rd, gr, bl);
 	return cellColor;
 }
-
 
 void SCore::GetKq(int tParam, int isMain)
 {
@@ -210,10 +203,8 @@ void SCore::GetPointData()
 {
 	try 
 	{
-		TVS.main.clear();
-		TVS.secondary.clear();
-		TVS.main_s.clear();
-		TVS.secondary_s.clear();
+		TVS.Clear();
+
 
 		system("cls");
 
@@ -266,9 +257,13 @@ void SCore::GetPointData()
 			return;
 		}
 
+
+		SelectAssemblies();
+
 		if (TVS.isDifference)
 			TVS.CalculateDev();
 		TVS.Sort();
+		TVS.SetZeroGroup(colors_quantity);
 		TVS.isNumericalData = loadVal - 2;
 		TVS.isLoaded = true;
 
@@ -295,7 +290,6 @@ void SCore::SetCoordinates(int fa_quantity)
 	coordinates = ReturnCoordinatesTvs(fa_quantity, mode);
 }
 
-
 double SCore::GetCoordinates(int fa, bool isX)
 {
 	double _c = 0;
@@ -307,3 +301,4 @@ double SCore::GetCoordinates(int fa, bool isX)
 	return _c * grid_pitch * scale;
 
 }
+

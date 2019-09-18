@@ -28,7 +28,7 @@ std::vector<std::pair<double, double>> ReturnCoordinatesTvs(short quantity, int 
 			std::vector<std::pair<double, double>> value;
 			for (int i = 0; i < quantity; i++)
 			{
-				std::pair<double, double> v = pFunction(tvs_size, i, mode, true);
+				std::pair<double, double> v = pFunction(tvs_size, i+1, mode, true);
 				value.push_back(v);
 			}
 				

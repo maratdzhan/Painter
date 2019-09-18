@@ -19,6 +19,7 @@ void SCore::NullInitialize()
 	parameters["TEXT_STRIKEOUT"] = "0";
 	parameters["TEXT_INIT_X"] = "-10";
 	parameters["TEXT_INIT_Y"] = "-5";
+	parameters["DEBUG"] = "0";
 
 }
 
@@ -79,13 +80,16 @@ void SCore::Initialize()
 		i = stoi(parameters["TEXT_INIT_Y"]);
 		SetTextInitY(i);
 
+		i = stoi(parameters["DEBUG"]);
+		SetDebug(i);
+
 		if (sp - parameters.size() != 0)
 			log.Error("***something was added at input data", __FUNCTION__);
 	}
 	catch (exception & exc)
 	{
 		NullInitialize();
-		cerr << "error at loading\n";
+		cerr <<exc.what()<< " => error at loading\n";
 		log.Error("loading parameters", __FUNCTION__);
 		Initialize();
 	}
@@ -388,6 +392,16 @@ int SCore::GetColorsQuantity()const
 	return colors_quantity;
 }
 
+void SCore::SetDebug(int _i)
+{
+	m_debug = _i;
+}
+
+int SCore::GetDebug()const
+{
+	return m_debug;
+}
+
 void SCore::EditCommonInfo()
 {
 
@@ -426,6 +440,7 @@ void SCore::CommandsList()
 	cerr << "close - close core window\n";
 	cerr << "store - save core in bmp-file\n";
 	cerr << "update - update core image\n";
+	cerr << "debug_info - get some variables information \n";
 	cerr << "end - exit from program\n";
 	cerr << "\n\n>>> ";
 
@@ -448,7 +463,7 @@ void SCore::Edit(string _v)
 			cerr << "Cancel\n";
 			return;
 		}
-		else if (r > 0 && r <= parameters.size())
+		else if (r > 0 && r <= (int)parameters.size())
 		{
 			CurrentValues(r);
 			EditValues(r);
@@ -503,6 +518,7 @@ int SCore::GetTextCommand(const string& cmd)
 	if (cmd == "SETTSO") return 15;
 	if (cmd == "SETTIX") return 16;
 	if (cmd == "SETTIY") return 17;
+	if (cmd == "SETD") return 18;
 	if (cmd == "0") return 0;
 
 	return -1;
@@ -563,6 +579,10 @@ void SCore::CurrentValues(int param)
 		break;
 	case 17:
 		cerr << GetTextInitY();
+		break;
+	case 18:
+		cerr << GetDebug();
+		break;
 	}
 	cerr << endl;
 
@@ -638,6 +658,9 @@ void SCore::EditValues(int param)
 					break;
 				case 17:
 					SetTextInitY(val);
+					break;
+				case 18:
+					SetDebug(val);
 					break;
 				}
 				if (IsCoreActive())

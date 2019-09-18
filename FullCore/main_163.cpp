@@ -54,6 +54,7 @@ int main()
 			sys.Edit("");
 			break;
 		case 3:
+			// GET
 			sys.GetPointData();
 			break;
 		case 5:
@@ -70,11 +71,14 @@ int main()
 			sys.Load();
 			sys.Initialize();
 			break;
+		case 9:
+			sys.Save("");
+			break;
 		case 10:
 			sys.Save("");
 			return 0;
-		case 9:
-			sys.Save("");
+		case 11:
+			sys.DebugInfo();
 			break;
 		case -1:
 			break;

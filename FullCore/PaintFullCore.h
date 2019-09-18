@@ -126,8 +126,6 @@ LRESULT CALLBACK WndGraph(HWND hWnd, UINT message,
 	}
 	}
 }
-	
-
 
 void SCore::Paint()
 {
@@ -135,11 +133,12 @@ void SCore::Paint()
 	hwnd = NULL;
 	if (IsLoaded() && !IsCoreActive())
 	{
-		if (TVS.main.size() >= fa_count && TVS.secondary.size() >= fa_count) {
+		if ((int)TVS.main.size() >= fa_count && (int)TVS.secondary.size() >= fa_count) {
 			DefineMode();
 			SetCoordinates(fa_count);
 			GraphThread = (HANDLE)_beginthreadex(NULL, 0, MyThread, NULL, 0, NULL);
 			SetCoreActive(true);
+			if (!GetDebug()) system("cls");
 		}
 		else
 		{
