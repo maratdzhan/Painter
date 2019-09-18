@@ -19,6 +19,7 @@ void SCore::NullInitialize()
 	parameters["TEXT_STRIKEOUT"] = "0";
 	parameters["TEXT_INIT_X"] = "-10";
 	parameters["TEXT_INIT_Y"] = "-5";
+	parameters["POLARITY"] = "MAIN";
 	parameters["DEBUG"] = "0";
 
 }
@@ -82,6 +83,8 @@ void SCore::Initialize()
 
 		i = stoi(parameters["DEBUG"]);
 		SetDebug(i);
+
+		SetPolarity(parameters["POLARITY"]);
 
 		if (sp - parameters.size() != 0)
 			log.Error("***something was added at input data", __FUNCTION__);
@@ -336,6 +339,20 @@ void SCore::SetColorsQuantity(int _v)
 	}
 }
 
+void SCore::SetPolarity(string & _s) {
+
+	_s = ToUpperFunct(_s);
+	if (_s != "MAIN" && _s != "SECONDARY") {
+		cerr << "Enter\nMAIN - set on main.txt\nSECONDARY - set on secondary.txt\n";
+		cin >> _s;
+		SetPolarity(_s);
+	}
+	else
+		parameters["POLARITY"] = _s;
+
+	system("cls");
+}
+
 int SCore::GetImageSizeX()const
 {
 	return sx;
@@ -402,6 +419,11 @@ int SCore::GetDebug()const
 	return m_debug;
 }
 
+string SCore::GetPolarity() const
+{
+	return parameters.at("POLARITY");
+}
+
 void SCore::EditCommonInfo()
 {
 
@@ -422,6 +444,7 @@ void SCore::EditCommonInfo()
 	cerr << "SetTS (text strikeout)\n";
 	cerr << "SetTIX (text initial X pos)\n";
 	cerr << "SetTIY (text initial Y pos)\n";
+	cerr << "Polarity (values polarity)\n";
 	cerr << "0 - Cancel\n";
 	cerr << "\n";
 
@@ -519,6 +542,7 @@ int SCore::GetTextCommand(const string& cmd)
 	if (cmd == "SETTIX") return 16;
 	if (cmd == "SETTIY") return 17;
 	if (cmd == "SETD") return 18;
+	if (cmd == "POLARITY") return 19;
 	if (cmd == "0") return 0;
 
 	return -1;
@@ -582,6 +606,9 @@ void SCore::CurrentValues(int param)
 		break;
 	case 18:
 		cerr << GetDebug();
+		break;
+	case 19:
+		cerr << GetPolarity();
 		break;
 	}
 	cerr << endl;
@@ -661,6 +688,11 @@ void SCore::EditValues(int param)
 					break;
 				case 18:
 					SetDebug(val);
+					break;
+				case 19:
+					TVS.dev.clear();
+					SetPolarity(s);
+					TVS.CalculateDev(parameters["POLARITY"]);
 					break;
 				}
 				if (IsCoreActive())

@@ -1,8 +1,8 @@
 #pragma once
 
-string VARIBLE_NAME = "NULL";
+string VARIABLE_NAME = "NULL";
 
-#define SAVE_VARIBLE_NAME(varible) VARIBLE_NAME = string(#varible);
+#define SAVE_VARIBLE_NAME(varible) VARIABLE_NAME = string(#varible);
 
 
 
@@ -54,6 +54,7 @@ public:
 	void SetTextInitX(int _i);
 	void SetTextInitY(int _i);
 	void SetDebug(int _i);
+	void SetPolarity(string &_s);
 
 	// GetCoreParameters
 	int GetCellSize()const;
@@ -78,6 +79,8 @@ public:
 	void SetCoordinates(int fa_quantity);
 	double GetCoordinates(int fa_quantity, bool isX);
 	int GetDebug()const;
+	string GetPolarity() const;
+
 	// Text
 	void EditCommonInfo();
 	void CommandsList();
@@ -205,7 +208,7 @@ void SCore::SelectAssemblies()
 
 void SCore::Cut(std::vector<double> & input)
 {
-	std::cerr << " :: more than " << GetFuelAssemblyQuantity() << " points\n";
+	std::cerr <<">>>"<< VARIABLE_NAME << " :: more than " << GetFuelAssemblyQuantity() << " points\n";
 	std::cerr << "defined as <FuelAssemblyQuantity()>\n";
 	std::cerr << "Would you like select cut the assemblies array? (1 - Y, 0 - N)\n";
 
@@ -226,14 +229,16 @@ void SCore::Cut(std::vector<double> & input)
 	std::cerr << "samples quantity: " << _sample 
 		<< std::endl<< "\nwich sample you want to observe? (-1 - quit)\n";
 	int sq = _sample;
+	std::string s_sample;
 	while (1) {
 		std::cerr << ">>";
-		std::cin >> _sample;
-		if (_sample == -1)
+		std::cin >> s_sample;
+		if (s_sample == "-1")
 			//return;
 			std::cerr << "command disabled. Cut an array\n";
+		_sample = stoi(s_sample);
 		if (_sample <= 0 || _sample > sq)
-			std::cerr << "wrong\n";
+			std::cerr << "wrong "<<__FUNCTION__<<"\n";
 		else
 			break;
 	}

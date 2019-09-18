@@ -24,7 +24,8 @@ class KK_values
 public:
 	KK_values();
 
-	void CalculateDev();
+	void CalculateDev(const string & _polarity);
+	void DevCycle(vector<double>& input_1, vector<double>& input_2);
 	int HashFunction(const string& input);
 	void HashingStringsValues(vector<double>& output, vector<string>& input);
 	void Sort();
@@ -57,17 +58,34 @@ KK_values::KK_values()
 	isLoaded = false;
 }
 
-void KK_values::CalculateDev()
+void KK_values::CalculateDev(const string & _s)
 {
-	for (size_t i = 0; i < main.size(); i++)
+	if (_s=="MAIN")
+		DevCycle(main, secondary);
+	else
+		DevCycle(secondary, main);
+}
+
+void KK_values::DevCycle(vector<double>& input_1, vector<double>& input_2)
+{
+	//for (size_t i = 0; i < main.size(); i++)
+	//{
+	//	if (main[i] != 0)
+	//		dev.push_back((secondary[i] - main[i]) * 100. / main[i]);
+	//	else
+	//	{
+	//		dev.push_back(0);
+	//	}
+	//}
+
+	for (size_t i = 0; i < input_2.size(); i++)
 	{
-		if (main[i] != 0)
-			dev.push_back((secondary[i] - main[i]) * 100. / main[i]);
+		if (input_2[i] != 0)
+			dev.push_back((input_1[i] - input_2[i]) * 100. / input_2[i]);
 		else
 		{
 			dev.push_back(0);
 		}
-
 	}
 }
 

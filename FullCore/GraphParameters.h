@@ -201,7 +201,7 @@ void SCore::GetKq(int tParam, int isMain)
 
 void SCore::GetPointData()
 {
-	try 
+	try
 	{
 		TVS.Clear();
 
@@ -216,7 +216,7 @@ void SCore::GetPointData()
 
 			cin >> _key;
 			if (_key == "1") {
-				loadVal =0;
+				loadVal = 0;
 				break;
 			}
 			if (_key == "2") {
@@ -227,10 +227,10 @@ void SCore::GetPointData()
 		}
 
 		GetKq(loadVal + 0, 0);
-		GetKq(loadVal +  1,1);
-		
+		GetKq(loadVal + 1, 1);
+
 		printf("Color by difference(1) or set on main value(2)?\n");
-		while (1) 
+		while (1)
 		{
 			cin >> _key;
 			if (_key == "1") {
@@ -261,7 +261,7 @@ void SCore::GetPointData()
 		SelectAssemblies();
 
 		if (TVS.isDifference)
-			TVS.CalculateDev();
+			TVS.CalculateDev(parameters["POLARITY"]);
 		TVS.Sort();
 		TVS.SetZeroGroup(colors_quantity);
 		TVS.isNumericalData = loadVal - 2;

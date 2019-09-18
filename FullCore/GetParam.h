@@ -110,8 +110,8 @@ int GetNumberFromCommand(const std::string& s)
 	}
 	catch (exception & ex)
 	{
-		cerr <<ex.what()<< " => Wrong stoi argument at " << __FUNCTION__ << endl;
+		cerr <<ex.what()<< " => Wrong stoi argument "<<s<<" at " << __FUNCTION__ << endl;
 	}
 
-	return stoi(s);
+	return rs;
 }
