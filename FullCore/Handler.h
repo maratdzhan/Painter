@@ -104,6 +104,7 @@ public:
 	void Store();
 	void SelectAssemblies();
 	void Cut(std::vector<double>& input);
+	void ToLog(const std::string&);
 
 private:
 	void EditValues(int param);
@@ -277,4 +278,10 @@ void SCore::DebugInfo() {
 	cerr << "Text thickness: " << text_thikness << endl;
 	cerr << "Text underline/strikeout: " << text_underline << " / " << text_strikeout << endl;
 	cerr << "Text initial position (X/Y): " << text_init_x << " / " << text_init_y << endl;
+}
+
+
+void SCore::ToLog(const std::string& str)
+{
+	log.Console(0, str);
 }

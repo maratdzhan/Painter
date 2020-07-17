@@ -4,7 +4,7 @@
 TCHAR current_library_path[80] = "/lib/";
 //const double tvs_size = 236; // Nominal
 
-std::vector<std::pair<double, double>> ReturnCoordinatesTvs(short quantity, int mode)
+std::vector<std::pair<double, double>> ReturnCoordinatesTvs(short quantity, int mode, bool dbg)
 {
 	//static HINSTANCE hLibrary_163;
 	HMODULE hLibrary_163;
@@ -12,33 +12,55 @@ std::vector<std::pair<double, double>> ReturnCoordinatesTvs(short quantity, int 
 	// ѕри загрузке мен€етс€ текуща€ директори€ и библиотека грузитс€ оттуда, где ее нет.
 
 
-	_chdir(current_library_path);
+	//_chdir(current_library_path);
 
 	hLibrary_163 = LoadLibrary(_T("Coordinates_Definition"));
-	std::pair<double, double>(*pFunction) (double, int, int, bool);
-	//step,quantity,mode, debug_mode
+	
 
-	if (hLibrary_163)
+	std::pair<double, double>(*pFunction) (double, int, int, bool);
+	
+
+	if (hLibrary_163 && quantity)
 	{
-		(FARPROC&)pFunction = GetProcAddress(hLibrary_163, "cdefine");
-		if (pFunction == NULL)
-			cout << "NOT FIND cdefine at Coordinates_definition at ''ReturnCoordinates function\n";
-		else
-		{
-			std::vector<std::pair<double, double>> value;
-			for (int i = 0; i < quantity; i++)
-			{
-				std::pair<double, double> v = pFunction(tvs_size, i+1, mode, true);
-				value.push_back(v);
+		try {
+			(FARPROC&)pFunction = GetProcAddress(hLibrary_163, "cdefine");
+
+			if (pFunction == NULL)
+			{	
+				std::string msg = "NOT FIND cdefine at Coordinates_definition at ''ReturnCoordinates function\n";
+				std::cerr << msg;
+				system("pause");
+				throw(1);
 			}
-				
-			return value;
+			else
+			{
+
+				std::vector<std::pair<double, double>> value;
+				for (int i = 0; i < quantity; i++)
+				{
+					std::pair<double, double> v = pFunction(tvs_size, i + 1, mode, dbg);
+					value.push_back(v);
+				}
+
+				return value;
+			}
+		}
+		catch (std::exception & e)
+		{
+			std::cerr << e.what();
+			system("pause");
+			throw(2);
 		}
 	}
 	else
 	{
-		cout << "ERROR OPENING LIBRARY => COORDINATES_DEFINITION.dll\n";
+		std::string err = "ERROR OPENING LIBRARY => COORDINATES_DEFINITION.dll\n";
+		cout << err;
+		system("pause");
+		throw(3);
+
 	}
+	throw(4);
 	return { {0,0} };
 }
 

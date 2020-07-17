@@ -48,6 +48,7 @@ int main()
 		switch (command)
 		{
 		case 1:
+			sys.ToLog("Painting\n");
 			sys.Paint();
 			break;
 		case 2:

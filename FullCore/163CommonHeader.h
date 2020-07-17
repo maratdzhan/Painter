@@ -83,9 +83,7 @@ void KK_values::DevCycle(vector<double>& input_1, vector<double>& input_2)
 		if (input_2[i] != 0)
 			dev.push_back((input_1[i] - input_2[i]) * 100. / input_2[i]);
 		else
-		{
 			dev.push_back(0);
-		}
 	}
 }
 

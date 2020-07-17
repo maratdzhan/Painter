@@ -2434,3 +2434,45 @@ Wed Sep 18 16:15:15 2019
 
 SCore::Initialize
 ***something was added at input data *error*
+### Session start
+Tue Jun 16 14:27:51 2020
+
+### Session start
+Tue Jun 16 14:30:21 2020
+
+### Session start
+Tue Jun 16 15:32:16 2020
+
+Painting
+
+Loaded and Active
+Sizes - ok
+mode - ok
+Start extract coords
+:163
+created thread
+### Session start
+Tue Jun 16 15:35:46 2020
+
+### Session start
+Thu Jul 16 16:06:55 2020
+
+### Session start
+Thu Jul 16 16:07:16 2020
+
+Painting
+
+Loaded and Active
+Sizes - ok
+mode - ok
+Start extract coords
+code:163
+created thread
+Painting
+
+Loaded and Active
+Sizes - ok
+mode - ok
+Start extract coords
+code:163
+created thread

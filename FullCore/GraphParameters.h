@@ -286,8 +286,21 @@ void SCore::DefineMode()
 
 void SCore::SetCoordinates(int fa_quantity)
 {
+	log.Console(0, "Start extract coords");
 	coordinates.clear();
-	coordinates = ReturnCoordinatesTvs(fa_quantity, mode);
+	try {
+		coordinates = ReturnCoordinatesTvs(fa_quantity, mode, GetDebug());
+		log.Console(0,__FUNCTION__ + ' ' + std::to_string(coordinates.size()));
+	}
+	catch (int err)
+	{
+		log.Console(0, "Err code:");
+		log.Console(0, std::to_string(err));
+		log.Console(0, "empty coordinates - break;");
+		std::length_error w("breaking cycle");
+		throw(w);
+		
+	}
 }
 
 double SCore::GetCoordinates(int fa, bool isX)

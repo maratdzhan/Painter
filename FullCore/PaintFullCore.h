@@ -133,17 +133,28 @@ void SCore::Paint()
 	hwnd = NULL;
 	if (IsLoaded() && !IsCoreActive())
 	{
-		if ((int)TVS.main.size() >= fa_count && (int)TVS.secondary.size() >= fa_count) {
-			DefineMode();
-			SetCoordinates(fa_count);
-			GraphThread = (HANDLE)_beginthreadex(NULL, 0, MyThread, NULL, 0, NULL);
-			SetCoreActive(true);
-			if (!GetDebug()) system("cls");
+		log.Console(0, "Loaded and Active");
+		try {
+			if ((int)TVS.main.size() >= fa_count && (int)TVS.secondary.size() >= fa_count) {
+				log.Console(0, "Sizes - ok");
+				DefineMode();
+				log.Console(0, "mode - ok");
+				SetCoordinates(fa_count);
+				GraphThread = (HANDLE)_beginthreadex(NULL, 0, MyThread, NULL, 0, NULL);
+				log.Console(0, "created thread");
+				SetCoreActive(true);
+				if (!GetDebug()) system("cls");
+			}
+			else
+			{
+				printf(">>>wrong geometry. Check fa quantity\n>>>current: %i && %i, but needs %i\n\n",
+					TVS.main.size(), TVS.secondary.size(), fa_count);
+			}
 		}
-		else
+		catch (std::exception & exc)
 		{
-			printf(">>>wrong geometry. Check fa quantity\n>>>current: %i && %i, but needs %i\n\n",
-				TVS.main.size(), TVS.secondary.size(), fa_count);
+			log.Console(0, "Error occured: ");
+			log.Console(0, exc.what());
 		}
 	}
 	else
