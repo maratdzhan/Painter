@@ -17,8 +17,6 @@ public:
 		Initialize();
 	}
 
-
-
 	void Load();
 	void Initialize();
 	void NullInitialize();
@@ -26,6 +24,7 @@ public:
 	void GetKq(int tParam, int isMain);
 	void TextOutCore(HDC hdc, int number);
 	COLORREF ColorReference(short number);
+	void BuildColorMap();
 	std::string GraphParameters(std::string parameter_name);
 	void TextOutCoord();
 
@@ -55,6 +54,14 @@ public:
 	void SetTextInitY(int _i);
 	void SetDebug(int _i);
 	void SetPolarity(string &_s);
+	void SetLegendShift(int _v);
+	void SetLegendHeight(int _v);
+	void SetLegendTextShiftX(int _v);
+	void SetLegendTextShiftY(int _v);
+	void SetLegendTextSize(int _v);
+	void SetCartShiftX(int _v);
+	void SetCartShiftY(int _v);
+	void SetLegendRequired(bool _f);
 
 	// GetCoreParameters
 	int GetCellSize()const;
@@ -80,6 +87,15 @@ public:
 	double GetCoordinates(int fa_quantity, bool isX);
 	int GetDebug()const;
 	string GetPolarity() const;
+	int GetLegendShift() const;
+	int GetLegendHeight() const;
+	int GetLegendTextShiftX() const;
+	int GetLegendTextShiftY() const;
+	int GetLegendTextSize() const;
+	int GetCartShiftX() const;
+	int GetCartShiftY() const;
+	bool IsLegendRequired() const;
+
 
 	// Text
 	void EditCommonInfo();
@@ -136,6 +152,16 @@ private:
 	bool text_strikeout;
 	int text_init_x;
 	int text_init_y;
+	// LEGEND
+	bool isLegendRequired;
+	int cart_shift_x;
+	int cart_shift_y;
+	int legend_height;
+	int legend_shift;
+	int legend_text_size;
+	int legend_text_shift_x;
+	int legend_text_shift_y;
+	//
 	vector<int> text_coords;
 	vector<string> stringsPosition;
 	Logging log;
@@ -145,6 +171,7 @@ private:
 	bool isCoreActive;
 	int mode;
 	vector<pair<double, double>> coordinates;
+	map<int, pair<double, COLORREF>> colorMap;
 };
 
 

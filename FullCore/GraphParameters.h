@@ -60,19 +60,19 @@ COLORREF SCore::ColorReference(short number)
 
 	min_value = TVS.tvs_min;
 	max_value = TVS.tvs_max;
-	double current_value = (TVS.isDifference ? TVS.dev[number] : TVS.main[number]);
+	double current_value = (TVS.isDifference == 1 ? TVS.dev[number] : (TVS.isDifference == 0 ? TVS.main[number] : TVS.secondary[number]));
 
 	double range = max_value - min_value;
-//	double step_size = range / (colors_quantity - 1);
+	//	double step_size = range / (colors_quantity - 1);
 
 	short group_number = -1;
 
 	unsigned short stColorVal = 120;
 	unsigned short endColorVal = 255;
 
-//	short zero_group = 0;
+	//	short zero_group = 0;
 
-	// Вычисление группы, к которой принадлежит текущий элемент
+		// Вычисление группы, к которой принадлежит текущий элемент
 
 	group_number = (int)((current_value - TVS.tvs_min) * colors_quantity / (TVS.tvs_max - TVS.tvs_min));
 
@@ -130,14 +130,14 @@ COLORREF SCore::ColorReference(short number)
 		rd = 255;
 		gr = 255;
 		bl = 255;
-		if (group_number < (colors_quantity+ TVS.zero_group) / 2)
+		if (group_number < (colors_quantity + TVS.zero_group) / 2)
 		{
 			bl -= (255 / (colors_quantity - TVS.zero_group)) * (group_number - TVS.zero_group);
 		}
 		else
 		{
-			bl = 130 - (130 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group + 1);
-			gr = 255 - (255 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group + 1);
+			bl = 130 - (130 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group - 1);
+			gr = 255 - (255 / (colors_quantity - TVS.zero_group - 1)) * (group_number - TVS.zero_group - 1);
 		}
 	}
 
@@ -151,6 +151,17 @@ COLORREF SCore::ColorReference(short number)
 	//rd = (group_number > TVS.zero_group ? 255 : 255 * ((double)group_number / TVS.zero_group));
 
 	cellColor = RGB(rd, gr, bl);
+
+	//// COLOR_MAP
+	double color_val = 0;
+	if (colorMap[group_number].second != 0)
+		color_val = (current_value < colorMap[group_number].first ? current_value : colorMap[group_number].first);
+	else
+		color_val = current_value;
+	colorMap[group_number] = { color_val, cellColor };
+
+
+	///
 	return cellColor;
 }
 
@@ -205,12 +216,11 @@ void SCore::GetPointData()
 	{
 		TVS.Clear();
 
-
 		system("cls");
 
 		string _key;
 		int loadVal = 0;
-		printf("Is load numerical data?\n (1 - yes, 2 - no, this is string-data\n");
+		printf("Is load numerical data?\n (1 - yes, 2 - no, this is string-data)\n");
 		while (1)
 		{
 
@@ -229,7 +239,7 @@ void SCore::GetPointData()
 		GetKq(loadVal + 0, 0);
 		GetKq(loadVal + 1, 1);
 
-		printf("Color by difference(1) or set on main value(2)?\n");
+		printf("Color by difference(1) or set on main values(2) or set on secondary values(3)?\n");
 		while (1)
 		{
 			cin >> _key;
@@ -239,6 +249,11 @@ void SCore::GetPointData()
 			}
 			if (_key == "2") {
 				TVS.isDifference = 0;
+				break;
+			}
+			if (_key == "3")
+			{
+				TVS.isDifference = 2;
 				break;
 			}
 			cerr << "unknown command\n";
@@ -260,7 +275,7 @@ void SCore::GetPointData()
 
 		SelectAssemblies();
 
-		if (TVS.isDifference)
+		if (TVS.isDifference == 1)
 			TVS.CalculateDev(parameters["POLARITY"]);
 		TVS.Sort();
 		TVS.SetZeroGroup(colors_quantity);

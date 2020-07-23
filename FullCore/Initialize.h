@@ -21,7 +21,14 @@ void SCore::NullInitialize()
 	parameters["TEXT_INIT_Y"] = "-5";
 	parameters["POLARITY"] = "MAIN";
 	parameters["DEBUG"] = "0";
-
+	parameters["LEGEND_REQUIRED"] = "0";
+	parameters["CART_SHIFT_X"] = "0";
+	parameters["CART_SHIFT_Y"] = "0";
+	parameters["LEGEND_HEIGHT"] = "20";
+	parameters["LEGEND_SHIFT"] = "0";
+	parameters["LEGEND_TEXT_SIZE"] = "10";
+	parameters["LEGEND_TEXT_SHIFT_X"] = "0";
+	parameters["LEGEND_TEXT_SHIFT_Y"] = "0";
 }
 
 void SCore::Initialize()
@@ -29,6 +36,7 @@ void SCore::Initialize()
 	int sp = parameters.size();
 	int i = 0;
 	double d = 0;
+	bool b = false;
 	try {
 		i = stoi(parameters["CELL_SIZE"]);
 		SetCellSize(i);
@@ -84,6 +92,30 @@ void SCore::Initialize()
 		i = stoi(parameters["DEBUG"]);
 		SetDebug(i);
 
+		b = stoi(parameters["LEGEND_REQUIRED"]);
+		SetLegendRequired(b);
+
+		i = stoi(parameters["CART_SHIFT_X"]);
+		SetCartShiftX(i);
+
+		i = stoi(parameters["CART_SHIFT_Y"]);
+		SetCartShiftY(i);
+
+		i = stoi(parameters["LEGEND_HEIGHT"]);
+		SetLegendHeight(i);
+
+		i = stoi(parameters["LEGEND_SHIFT"]);
+		SetLegendShift(i);
+
+		i = stoi(parameters["LEGEND_TEXT_SIZE"]);
+		SetLegendTextSize(i);
+
+		i = stoi(parameters["LEGEND_TEXT_SHIFT_X"]);
+		SetLegendTextShiftX(i);
+
+		i = stoi(parameters["LEGEND_TEXT_SHIFT_Y"]);
+		SetLegendTextShiftY(i);
+
 		SetPolarity(parameters["POLARITY"]);
 
 		if (sp - parameters.size() != 0)
@@ -96,332 +128,6 @@ void SCore::Initialize()
 		log.Error("loading parameters", __FUNCTION__);
 		Initialize();
 	}
-}
-
-void SCore::SetTextInitX(int _i)
-{
-	text_init_x = _i;
-	parameters["TEXT_INIT_X"] = to_string(text_init_x);
-}
-
-void SCore::SetTextInitY(int _i)
-{
-	text_init_y = _i;
-	parameters["TEXT_INIT_Y"] = to_string(text_init_y);
-}
-
-int SCore::GetTextInitX()const
-{
-	return text_init_x;
-}
-
-int SCore::GetTextInitY()const
-{
-	return text_init_y;
-}
-
-void SCore::SetTextStrikeout(int _b)
-{
-	text_strikeout = _b;
-	parameters["TEXT_STRIKEOUT"] = to_string(text_strikeout);
-}
-
-bool SCore::GetTextStrikeout()const
-{
-	return text_strikeout;
-}
-
-void SCore::SetTextUnderline(bool _b)
-{
-	text_underline = _b;
-	parameters["TEXT_UNDERLINE"] = to_string(text_underline);
-}
-
-bool SCore::GetTextUnderline()const
-{
-	return text_underline;
-}
-
-void SCore::SetTextThikness(int _v)
-{
-	if (_v > 0 && _v<=1000)
-		text_thikness = _v;
-	else
-	{
-		log.Error("thikness", __FUNCTION__);
-		text_thikness = 900;
-	}
-	parameters["TEXT_THIKNESS"] = to_string(text_thikness);
-}
-
-int SCore::GetTextThikness() const
-{
-	return text_thikness;
-}
-
-void SCore::SetGridPitch(double _v)
-{
-	if (_v > 0)
-		grid_pitch = _v;
-	else
-	{
-		log.Error("grid_pitch", __FUNCTION__);
-		grid_pitch = 2;
-	}
-	parameters["GRID_PITCH"] = to_string(grid_pitch);
-}
-
-
-
-double SCore::GetGridPitch()const
-{
-	return grid_pitch;
-}
-
-void SCore::SetCellSize(int _v)
-{
-	if (_v > 0)
-		cell_size = _v;
-	else
-	{
-		cell_size = 1;
-		log.Error("cell_size", __FUNCTION__);
-	}
-	parameters["CELL_SIZE"] = to_string(cell_size);
-}
-
-void SCore::SetColorVar(bool _b)
-{
-	colored = _b;
-	parameters["COLOR_VAR"] = to_string(colored);
-}
-
-void SCore::SetFuelAssemblyQuantity(int _v)
-{
-	if (_v < 0 && _v != 163 && _v != 360
-		&& _v != 28 && _v != 60
-		&& _v != 55 && _v != 120) {
-		log.Error("fuel assembly quantity", __FUNCTION__);
-		printf("Wrong value. Allowed:\n163 or 360 for 360 deg\n28 or 60 for 60 deg\n55 or 120 for 120deg\nCancel\n");
-		return;
-	}
-	if (_v == 60)
-		_v = 28;
-	else if (_v == 120)
-		_v = 55;
-	else if (_v == 360)
-		_v = 163;
-	fa_count = _v;
-	parameters["FA_QUANTITY"] = to_string(fa_count);
-}
-
-void SCore::SetImageSizeX(int _v)
-{
-	if (_v < 0)
-		log.Error("image size x", __FUNCTION__);
-	_v > 100 ? sx = _v : sx = 100;
-	parameters["IMAGE_SIZE_X"] = to_string(sx);
-}
-
-void SCore::SetImageSizeY(int _v)
-{
-	if (_v < 0)
-		log.Error("image size y", __FUNCTION__);
-	_v > 100 ? sy = _v : sy = 100;
-	parameters["IMAGE_SIZE_Y"] = to_string(sy);
-
-}
-
-void SCore::SetScale(double _d)
-{
-	if (_d < 0)
-		log.Error("scale", __FUNCTION__);
-	_d >0 ? scale = _d : scale = 1;
-	parameters["SCALE"] = to_string(scale);
-
-}
-
-void SCore::SetStringsQuantity(int _v)
-{
-	if (_v < 1 && _v>4) {
-		log.Error("strings quantity", __FUNCTION__);
-		_v = 2;
-	}
-	else
-		strings_quantity = _v;
-	parameters["STRINGS_QUANTITY"] = to_string(strings_quantity);
-
-}
-
-void SCore::SetTextLenght(size_t _l)
-{
-	if (_l < 1)
-	{
-		log.Error("text lenght", __FUNCTION__);
-		_l = 2;
-	}
-	else
-	{
-		text_lenght = _l;
-	}
-	parameters["TEXT_LENGHT"] = to_string(text_lenght);
-}
-
-void SCore::SetTextSize(int _v)
-{
-	if (_v < 1)
-	{
-		log.Error("text size", __FUNCTION__);
-		text_size = 8;
-	}
-	else
-	{
-		text_size = _v;
-	}
-	parameters["TEXT_SIZE"] = to_string(text_size);
-}
-
-void SCore::SetInitPosX(int _v)
-{
-	if (_v < 10 && _v>1200)
-	{
-		log.Error("initial position x", __FUNCTION__);
-		i_pos_x = 100;
-	}
-	else
-	{
-		i_pos_x = _v;
-	}
-	parameters["INIT_X"] = to_string(text_size);
-}
-
-void SCore::SetInitPosY(int _v)
-{
-	if (_v < 10 && _v>1200)
-	{
-		log.Error("initial position y", __FUNCTION__);
-		i_pos_y = 100;
-	}
-	else
-	{
-		i_pos_y = _v;
-	}
-	parameters["INIT_Y"] = to_string(text_size);
-}
-
-int SCore::GetInitPosX()const
-{
-	return i_pos_x;
-}
-
-int SCore::GetInitPosY()const
-{
-	return i_pos_y;
-}
-
-void SCore::SetTextYInterval(int _v)
-{
-	text_y_interval = _v;
-	parameters["TEXT_Y_INTERVAL"] = to_string(text_y_interval);
-}
-
-
-void SCore::SetColorsQuantity(int _v)
-{
-	if (_v < 1)
-	{
-		log.Error("text size", __FUNCTION__);
-		colors_quantity = 20;
-	}
-	else
-	{
-		colors_quantity = _v;
-	}
-}
-
-void SCore::SetPolarity(string & _s) {
-
-	_s = ToUpperFunct(_s);
-	if (_s != "MAIN" && _s != "SECONDARY") {
-		cerr << "Enter\nMAIN - set on main.txt\nSECONDARY - set on secondary.txt\n";
-		cin >> _s;
-		SetPolarity(_s);
-	}
-	else
-		parameters["POLARITY"] = _s;
-
-	system("cls");
-}
-
-int SCore::GetImageSizeX()const
-{
-	return sx;
-}
-
-int SCore::GetImageSizeY()const
-{
-	return sy;
-}
-
-
-int SCore::GetCellSize()const
-{
-	return cell_size;
-}
-
-bool SCore::GetColorVar()const
-{
-	return colored;
-}
-
-int SCore::GetFuelAssemblyQuantity()const
-{
-	return fa_count;
-}
-
-double SCore::GetScale()const
-{
-	return scale;
-}
-
-int SCore::GetStringsQuantity()const
-{
-	return strings_quantity;
-}
-
-size_t SCore::GetTextLenght()const
-{
-	return text_lenght;
-}
-
-int SCore::GetTextSize()const
-{
-	return text_size;
-}
-
-int SCore::GetTextYInterval()const
-{
-	return text_y_interval;
-}
-
-int SCore::GetColorsQuantity()const
-{
-	return colors_quantity;
-}
-
-void SCore::SetDebug(int _i)
-{
-	m_debug = _i;
-}
-
-int SCore::GetDebug()const
-{
-	return m_debug;
-}
-
-string SCore::GetPolarity() const
-{
-	return parameters.at("POLARITY");
 }
 
 void SCore::EditCommonInfo()
@@ -444,13 +150,22 @@ void SCore::EditCommonInfo()
 	cerr << "SetTS (text strikeout)\n";
 	cerr << "SetTIX (text initial X pos)\n";
 	cerr << "SetTIY (text initial Y pos)\n";
+	// LEGEND
+	cerr << "SetLegShift (legend shift (Y only))\n";
+	cerr << "SetLegH (legend height)\n";
+	cerr << "SetLTSize (legend text size)\n";
+	cerr << "SetLTShiftX (legend text shift X)\n";
+	cerr << "SetLTShiftY (legend text shift Y)\n";
+	cerr << "ShowLegend (0 - no/ 1 - yes)\n";
+	///
+	cerr << "SetCSX (cart shift -> X)\n";
+	cerr << "SetCSY (cart shift -> Y)\n";
+	///
 	cerr << "Polarity (values polarity)\n";
 	cerr << "0 - Cancel\n";
 	cerr << "\n";
 
 }
-
-
 
 void SCore::CommandsList()
 {
@@ -543,6 +258,14 @@ int SCore::GetTextCommand(const string& cmd)
 	if (cmd == "SETTIY") return 17;
 	if (cmd == "SETD") return 18;
 	if (cmd == "POLARITY") return 19;
+	if (cmd == "SETLEGSHIFT") return 20;
+	if (cmd == "SETLEGH") return 21;
+	if (cmd == "SETLTSIZE") return 22;
+	if (cmd == "SETLTSHIFTX") return 23;
+	if (cmd == "SETLTSHIFTY") return 24;
+	if (cmd == "SETCSX") return 25;
+	if (cmd == "SETCSY") return 26;
+	if (cmd == "SHOWLEGEND") return 27;
 	if (cmd == "0") return 0;
 
 	return -1;
@@ -574,6 +297,7 @@ void SCore::CurrentValues(int param)
 		break;
 	case 7:
 		cerr << GetTextLenght();
+		break;
 	case 8:
 		cerr << GetTextSize();
 		break;
@@ -609,6 +333,28 @@ void SCore::CurrentValues(int param)
 		break;
 	case 19:
 		cerr << GetPolarity();
+		break;
+	case 20:
+		cerr << GetLegendShift();
+		break;
+	case 21:
+		cerr << GetLegendHeight();
+		break;
+	case 22:
+		cerr << GetLegendTextSize();
+		break;
+	case 23:
+		cerr << GetLegendTextShiftX();
+		break;
+	case 24:
+		cerr << GetLegendTextShiftY();
+		break;
+	case 25:
+	case 26:
+		cerr << "(X;Y)"<< GetCartShiftX() << ";" << GetCartShiftY();
+		break;
+	case 27:
+		cerr << IsLegendRequired();
 		break;
 	}
 	cerr << endl;
@@ -694,6 +440,30 @@ void SCore::EditValues(int param)
 					SetPolarity(s);
 					TVS.CalculateDev(parameters["POLARITY"]);
 					break;
+				case 20:
+					SetLegendShift(val);
+					break;
+				case 21:
+					SetLegendHeight(val);
+					break;
+				case 22:
+					SetLegendTextSize(val);
+					break;
+				case 23:
+					SetLegendTextShiftX(val);
+					break;
+				case 24:
+					SetLegendTextShiftY(val);
+					break;
+				case 25:
+					SetCartShiftX(val);
+					break;
+				case 26:
+					SetCartShiftY(val);
+					break;
+				case 27:
+					SetLegendRequired(val);
+					break;
 				}
 				if (IsCoreActive())
 					Update();
@@ -709,7 +479,6 @@ void SCore::EditValues(int param)
 	}
 
 }
-
 
 void SCore::Save(const std::string& s)
 {
@@ -728,5 +497,4 @@ void SCore::Save(const std::string& s)
 
 	ofs.close();
 }
-
 

@@ -123,11 +123,13 @@
     <ClInclude Include="163CommonHeader.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="GetParam.h" />
+    <ClInclude Include="Getters.h" />
     <ClInclude Include="GraphParameters.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Initialize.h" />
     <ClInclude Include="Logging.h" />
     <ClInclude Include="PaintFullCore.h" />
+    <ClInclude Include="Setters.h" />
     <ClInclude Include="Store.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

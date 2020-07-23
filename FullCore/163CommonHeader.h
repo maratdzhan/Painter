@@ -42,7 +42,7 @@ public:
 	vector<string> main_s;
 	vector<string> secondary_s;
 	vector<double> dev;
-	bool isDifference;
+	int isDifference;
 	bool isNumericalData;
 	bool isLoaded;
 };
@@ -54,7 +54,7 @@ KK_values::KK_values()
 	zero_group = 0;
 	int NUM_FA_ = 0;
 	step_size = 0;
-	isDifference = false;
+	isDifference = 0;
 	isLoaded = false;
 }
 
@@ -109,10 +109,12 @@ void KK_values::HashingStringsValues(vector<double>& output, vector<string>& inp
 void KK_values::Sort()
 {
 	vector<double> cp;
-	if (isDifference)
+	if (isDifference == 1)
 		cp = dev;
-	else
+	else if (isDifference == 0)
 		cp = main;
+	else if (isDifference == 2)
+		cp = secondary;
 
 	sort(cp.begin(), cp.end());
 	tvs_max = cp[cp.size() - 1];
@@ -165,8 +167,9 @@ void KK_values::Clear()
 	dev.clear();
 }
 
-
 #include "Handler.h"
+#include "Setters.h"
+#include "Getters.h"
 #include "Initialize.h"
 #include "GraphParameters.h"
 
